@@ -1,0 +1,22 @@
+{
+    "name": "monokai",
+    "displayName": "Monokai",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "Neitex",
+    "engines": {
+        "vscode": "^1.22.0"
+    },
+    "categories": [
+        "Themes"
+    ],
+    "contributes": {
+        "themes": [
+            {
+                "label": "Monokai",
+                "uiTheme": "vs-dark",
+                "path": "./themes/Monokai-color-theme.json"
+            }
+        ]
+    }
+}
