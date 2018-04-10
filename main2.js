@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
-const prefix = "!";
+const prefix = "!" || "?";
 const TOKEN = "NDI0NTQyODM4NjUxMzU1MTM4.Daq48w.FzibeFcxfrpy-ulrEizB4sVZaog";
+const bot = ntx;
 //-----------установка констант--------\\
 
 
@@ -15,27 +16,13 @@ ntx.on('ready', () => {
 //-----------Скрипт готов к работе-----\\
 
 //-----------Блок комманд--------------\\
+ntx.on('message', function(message){
+        if(message.author.equals(ntx.user)) return;
+        if(!message.content.startsWith(prefix)) return;
+        
 
-{ //---------Отвечает привет-----------\\
-  ntx.on('message', (message) => {
-    if (message == "привет") {
-      if (message.author == ntx.user.tag) {
-        return;
-      } else {
-        message.reply("Привет! :wink::wave:");
-      }
-    }
-  });
-}
 
-{ //---------Провожает из чата---------\\
-  ntx.on('message', (message) => {
-    if (message == "пока") {
-      if (message.author == ntx.user.tag) {
-        return;
-      } else {
-        message.reply("Пока. Ждём тебя снова :wink:");
-      }
-    }
-  });
-}
+
+
+
+});
