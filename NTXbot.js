@@ -1,4 +1,5 @@
-const config = require("./config.json")
+const sleep = require("sleep");
+const config = require("./config.json");
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
 const bot = ntx;
@@ -59,8 +60,8 @@ ntx.on('ready', () => {
 //-----------Блок комманд--------------\\
 ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
-        if(!message.content.startsWith(prefix)) return;
-        var command = message.content.substring(prefix.length).split(" ");
+        if(!message.content.startsWith(config.prefix)) return;
+        var command = message.content.substring(config.prefix.length).split(" ");
 
         switch (command[0].toLowerCase()) {
           case "привет":{
@@ -88,8 +89,11 @@ ntx.on('message', function(message){
                 break;
               }
               case "отключись": {
-                if(message.author == config.bot_author) {
-                  message.channel.sendMessage("Отключаюсь. Прощай!");
+                if(message.author.id == config.bot_creator) {
+                  console.log("Подана комманда на отключение. Оключение через 10 секунд...");
+                  message.channel.sendMessage("Отключаюсь...");
+                  sleep.sleep(10);
+                  console.log("Отключаюсь...");
                   process.exit();
                 } else {
                   message.reply("...");
