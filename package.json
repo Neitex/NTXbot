@@ -1,8 +1,8 @@
 {
-  "name": "kickbot",
+  "name": "NTXbot",
   "version": "0.0.1",
   "description": "",
-  "main": "main2.js",
+  "main": "NTXbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
