@@ -87,6 +87,15 @@ ntx.on('message', function(message){
                 message.author.sendEmbed(help);
                 break;
               }
+              case "отключись": {
+                if(message.author == config.bot_author) {
+                  message.channel.sendMessage("Отключаюсь. Прощай!");
+                  process.exit();
+                } else {
+                  message.reply("...");
+                }
+                break;
+              }
             default: {
               message.channel.sendMessage("Окееей. Я не понял.");
               break;
