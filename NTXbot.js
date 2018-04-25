@@ -164,10 +164,11 @@ ntx.on('message', function(message){
                 if(message.author.id === config.bot_creator) {
                   message.delete();
                   message.channel.sendMessage("Ты же сам знаешь..)");
+                  message.delete();
                 }
                 if(message.author.id === config.german_id) {
                   message.delete(10);
-                  message.channel.sendMessage("КАК? ТЫ УЗНАЛ? ОБ ЭТОЙ КОММАНДЕ?");
+                  message.channel.sendMessage("...");
                   sleep.sleep(1);
                   message.delete(10);
                 }
