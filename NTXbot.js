@@ -1,5 +1,16 @@
-const sleep = require("sleep");
+var fs = require("fs");
+const download = require('download');
+if (fs.existsSync("./config.json") === true) {
+  console.log("Файл конфига найден, продолжаю скрипт")
 const config = require("./config.json");
+} else {
+console.log("Файл конфига не найден, скачиваю kolos-sad.by/files/config.json")
+download("http://kolos-sad.by/files/config.json").catch(console.error);
+console.log("Файл конфига скачан. Продолжаю скрипт.");
+const config = require("./config.json");
+}
+const human = member.guild.roles.find("name", "Человек").catch(console.error);
+const sleep = require("sleep");
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
 const bot = ntx;
@@ -70,7 +81,7 @@ ntx.on('ready', () => {
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
   member.guild.channels.find("name", "основной").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
-
+  member.addRole(human).catch(console.error);
   member.guild.createRole({
     name: member.user.username,
     color: randomHexColor(),
@@ -84,7 +95,7 @@ ntx.on("guildMemberAdd", function (member) {
 
 ntx.on("guildMemberRemove", function (member) {
     var temprole = member.guild.roles.find("name", "${member.user.username}");
-  member.guild.channels.find("name", "основной").sendMessage(member.toString() + "ушёл с сервера. Удачи! Надеюсь, ты получил удовольствие!");
+  member.guild.channels.find("name", "основной").sendMessage(member.toString() + "ушёл с сервера. Удачи! Надеюсь, ты получил(-а) удовольствие!");
   sleep.sleep(2);
       member.guild.roles.find("name", member.user.username).delete();
 });
@@ -152,28 +163,11 @@ ntx.on('message', function(message){
                }
                console.log(kickMember.u);
                kickMember.kick().then(member => {
-                 message.reply("Я его кикнул. Доволен? Теперь ты заставил человека страдать без этого сервера.");
+                 message.reply("Я кикнул ${kickmember}. Удачи ему.");
+
                }).catch(console.error);
                 break;
               } //конец кубика
-              case "игры": {
-                message.channel.sendEmbed(games);
-                break;
-              }
-              case "яна": {
-                if(message.author.id === config.bot_creator) {
-                  message.delete();
-                  message.channel.sendMessage("Ты же сам знаешь..)");
-                  message.delete();
-                }
-                if(message.author.id === config.german_id) {
-                  message.delete(10);
-                  message.channel.sendMessage("...");
-                  sleep.sleep(1);
-                  message.delete(10);
-                }
-                break;
-              }
             default: {
               message.channel.sendMessage("Окееей. Я не понял.");
               break;
