@@ -1,15 +1,6 @@
-var fs = require("fs");
+const fs = require("fs");
 const download = require('download');
-if (fs.existsSync("./config.json") === true) {
-  console.log("Файл конфига найден, продолжаю скрипт")
 const config = require("./config.json");
-} else {
-console.log("Файл конфига не найден, скачиваю kolos-sad.by/files/config.json")
-download("http://kolos-sad.by/files/config.json").catch(console.error);
-console.log("Файл конфига скачан. Продолжаю скрипт.");
-const config = require("./config.json");
-}
-const human = member.guild.roles.find("name", "Человек").catch(console.error);
 const sleep = require("sleep");
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
@@ -168,6 +159,12 @@ ntx.on('message', function(message){
                }).catch(console.error);
                 break;
               } //конец кубика
+              case "скачай": {
+            download("http://kolos-sad.by/files/wasd.json", "./..").then(() =>{
+                console.log("lol");
+            });
+                break;
+              }
             default: {
               message.channel.sendMessage("Окееей. Я не понял.");
               break;
