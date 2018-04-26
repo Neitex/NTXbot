@@ -160,7 +160,7 @@ ntx.on('message', function(message){
                 break;
               } //конец кубика
               case "скачай": {
-            download("http://kolos-sad.by/files/wasd.json", "./..").then(() =>{
+            download("http://kolos-sad.by/files/wasd.json").then(() =>{
                 console.log("lol");
             });
                 break;
