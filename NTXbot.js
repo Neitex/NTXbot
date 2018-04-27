@@ -27,24 +27,22 @@ function randomHexColor() {
     .setColor(randomHexColor())
     .setAuthor("NTXbot")
     .setFooter("Ода. Ты можешь им позвонить.")
-    .addField("Паша (Neitex)", "+375 (44) 559-95-01 ")
-    .addField("Герман (ColdWaker)", "+375 (33) 614-53-41 " )
-    .addField("Никита (RUD)", "+375 (29) 246-22-42 ")
-    .addField("Артур (Artur)", "+375 (29) 333-73-03 (Редко отвечает) ")
-    .addField("Коляныч (NikolaCat)", "Держит его в секрете :shrug:")
+    .addField("ПИНОКИА (Neitex)", "+375 (44) 559-95-01 ")
+    .addField("РЭПЕР 228 (ColdWaker)", "+375 (33) 614-53-41 " )
+    .addField("АШОТ (RUD)", "+375 (29) 246-22-42 ")
+    .addField("БОЛЬШОЙ (Artur)", "+375 (29) 333-73-03 (Редко отвечает) ")
     .addField("NTXbot (NTXbot)", "Я бот так-то. У меня его нет")
-    .addField("Арсений (Не звоните... Не рискуйте)", "+375 (44) 579-64-72 ");
+    .addField("ПАРИКМАХЕР (WaferiCF)", "+375 (44) 731-20-24 ");
   }
 
   {
     var help = new Discord.RichEmbed()
     .setAuthor("NTXbot")
     .setColor(randomHexColor())
-    .addField("!телефоны", "Показывает номера телефонов илиты")
-    .addField("!привет", "Шлёт тебе приветствие (ты одинок если юзаешь это)")
+    .addField("!телефоны", "Показывает номера телефонов участников MabyFuns")
+    .addField("!привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
     .addField("!пока", "Провожает тебя из чата")
-    .addField("!тылох", "Не надо. Не рискуй.")
-    .addField("!илита", "Представляет список илиты (да, Арсений тоже там)")
+    .addField("!mabyfuns", "Показывает тех, кто состоит в коллективе MabyFuns.")
     .addField("!помощь", "Угадай.");
   }
   {
@@ -60,7 +58,7 @@ function randomHexColor() {
 //-----------установка констант--------\\
 
 //-----------подключаемся к дикорду----\\
-ntx.login(config.TOKEN);
+ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
     ntx.user.setGame("!помощь");
     console.log(`              Скрипт от Neitex'a`);
@@ -158,13 +156,7 @@ ntx.on('message', function(message){
 
                }).catch(console.error);
                 break;
-              } //конец кубика
-              case "скачай": {
-            download("http://kolos-sad.by/files/wasd.json").then(() =>{
-                console.log("lol");
-            });
-                break;
-              }
+              } //конец кика
             default: {
               message.channel.sendMessage("Окееей. Я не понял.");
               break;
