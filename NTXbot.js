@@ -53,7 +53,7 @@ ntx.on('ready', () => {
     console.log(` Скрипт подключён к дискорду как ${ntx.user.tag}!`);
   });
 //-----------Скрипт готов к работе-----\\
-
+console.log("INIT DONE!")
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
   member.guild.channels.find("name", "основной-чатик").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
