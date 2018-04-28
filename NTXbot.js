@@ -88,18 +88,22 @@ ntx.on('message', function(message){
 
         switch (command[0].toLowerCase()) {
           case "привет" : {
+            message.delete(1);
             message.reply("Привет! Рад видеть тебя на нашем сервере! :wink::wave:");
             break;
           } //конец привета
           case "пока":{
+          message.delete();
           message.reply("Пока. Возвращайся скорей :wink:");
           break;
           } //конец пока
           case "тылох": {
+              message.delete();
               message.channel.send("Не понял вопроса");
               break;
             } //конец оскорбления
             case "mabyfuns":{
+              message.delete();
               message.author.sendEmbed(mabyfuns);
                 break;
               } //конец представления илиты
@@ -161,7 +165,7 @@ ntx.on('message', function(message){
                 let modRole = message.guild.roles.find("name", "ВИП");
                 message.delete();
                 if(!message.member.roles.has(modRole.id)) {
-                  return message.sendMessage("Я не буду тебе подчинатся.");
+                  return message.channel.sendMessage("Я не буду тебе подчинатся.");
                 };
                 if(!args){
                   return message.reply("Ты не указал(-а), что нужно сказать")
