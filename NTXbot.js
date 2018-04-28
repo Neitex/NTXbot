@@ -57,7 +57,7 @@ console.log("INIT DONE!")
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
   member.guild.channels.find("name", "основной-чатик").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
-  let human_role = member.guild.channels.find("name", "ВИП");
+  let human_role = member.guild.channels.find("name", "Человек");
   member.addRole(human_role).catch(console.error);
   member.guild.createRole({
     name: member.user.username,
