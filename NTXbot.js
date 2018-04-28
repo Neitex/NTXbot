@@ -1,5 +1,3 @@
-const fs = require("fs");
-const download = require('download');
 const config = require("./config.json");
 const sleep = require("sleep");
 const Discord = require("discord.js");
@@ -9,17 +7,16 @@ function randomHexColor() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 {
-   var elite = new Discord.RichEmbed()
+   var mabyfuns = new Discord.RichEmbed()
   .setAuthor("NTXbot")
   .setColor(randomHexColor())
-  .setFooter("Доволен? Теперь ты знаешь всю элиту сервера. Ещё есть !телефоны")
-  .addField("Паша (Neitex)", "АДМЕН. Создатель этого бота. Имеет заниженную самооценку. Могёт.")
-  .addField("Герман (ColdWaker)", "ВИП на сервере. Лучший друг адмена. Могёт.")
-  .addField("Никита (RUD)", "ВИП на сервере. Лучший друг лучшего друга адмена. Не могёт.")
-  .addField("Артур (Artur)", "Артур. Рост - over9999.")
-  .addField("Коляныч (NikolaCat)", "Просто коля. Редко играет :cry:")
-  .addField("NTXbot (NTXbot)", "Ну а как же без меня?)")
-  .addField("Арсений (стоп. его тоже нужно вписать?)", "Он ниже меня по рангу)");
+  .setFooter("Теперь ты знаешь всех актёров MabyFuns. Ещё есть !телефоны")
+  .addField("ПИНОКИА (Neitex)", "Маленький. Очень. Имеет заниженную самооценку. Могёт.")
+  .addField("РЭПЕР 228 (ColdWaker)", "Лудшый репер на мире. Могёт.")
+  .addField("АШОТ (RUD)", "Живёт в шикарной квартире  у толчка. Птица летит")
+  .addField("БОЛЬШОЙ (Artur)", "Растопчит и убьёт кого угодно и когда угодно. Рост - over9999.")
+  .addField("NTXbot (NTXbot)", "Орёл ест птицу.")
+  .addField("ПАРИКМАХЕР (WaferiCF)", "Может случайно убить.");
 }
 
   {
@@ -45,16 +42,6 @@ function randomHexColor() {
     .addField("!mabyfuns", "Показывает тех, кто состоит в коллективе MabyFuns.")
     .addField("!помощь", "Угадай.");
   }
-  {
-    var games = new Discord.RichEmbed()
-    .setAuthor("NTXbot")
-    .setColor(randomHexColor())
-    .setFooter("P.S. не заводи тему майнкрафта в общем чате")
-    .addField("Counter Strike:Global Offensive", "Самая популярная игра на сервере")
-    .addField("Fortnite", "Больше всего играем в неё")
-    .addField("Paladins: The champions of the realm", "Редко, но играем")
-    .addField("Minecraft", "ColdWaker его ненавидит. Пиши Neitex'y");
-  }
 //-----------установка констант--------\\
 
 //-----------подключаемся к дикорду----\\
@@ -69,8 +56,9 @@ ntx.on('ready', () => {
 
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
-  member.guild.channels.find("name", "основной").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
-  member.addRole(human).catch(console.error);
+  member.guild.channels.find("name", "новенькие").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
+  let human_role = member.guild.channels.find("name", "ВИП");
+  member.addRole(human_role).catch(console.error);
   member.guild.createRole({
     name: member.user.username,
     color: randomHexColor(),
@@ -94,9 +82,12 @@ ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
         if(!message.content.startsWith(config.prefix)) return;
         var command = message.content.substring(config.prefix.length).split(" ");
+        var command_args = command.slice();
+        command_args.shift();
+        var args = command_args;
 
         switch (command[0].toLowerCase()) {
-          case "привет":{
+          case "привет" : {
             message.reply("Привет! Рад видеть тебя на нашем сервере! :wink::wave:");
             break;
           } //конец привета
@@ -105,22 +96,25 @@ ntx.on('message', function(message){
           break;
           } //конец пока
           case "тылох": {
-              message.channel.send("ЧЕГО БЛ*ТЬ?");
+              message.channel.send("Не понял вопроса");
               break;
             } //конец оскорбления
-            case "илита":{
-              message.channel.sendEmbed(elite);
+            case "mabyfuns":{
+              message.author.sendEmbed(mabyfuns);
                 break;
               } //конец представления илиты
               case "телефоны": {
-                message.channel.sendEmbed(phones);
+                message.delete(1);
+                message.author.sendEmbed(phones);
                 break;
               } //конец телефонов
               case "помощь": {
+                message.delete();
                 message.author.sendEmbed(help);
                 break;
               }
               case "отключись": {
+                message.delete(1);
                 if(message.author.id == config.bot_creator) {
                   console.log("Подана комманда на отключение. Оключение через 10 секунд...");
                   message.channel.sendMessage("Отключаюсь...");
@@ -134,8 +128,9 @@ ntx.on('message', function(message){
               } // 
               case "кикни": {
                let modRole = message.guild.roles.find("name", "ВИП");
+               message.delete();
                if(!message.member.roles.has(modRole.id)){
-                 return message.reply("Не-а. Ты не достаточно силён для этого.").catch(console.error);
+                 return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
                }
                if(message.mentions.users.size === 0){
                  return message.reply("Сорян, некого кикать. @упомяни человека (да, так как я упомянул тебя).").catch(console.error);
@@ -157,7 +152,25 @@ ntx.on('message', function(message){
                }).catch(console.error);
                 break;
               } //конец кика
+              case "цвет": {
+                message.delete();
+                message.channel.sendMessage("Рандомный цвет в HEX: " + randomHexColor()).catch(console.error);
+                break;
+              }
+              case "скажи": {
+                let modRole = message.guild.roles.find("name", "ВИП");
+                message.delete();
+                if(!message.member.roles.has(modRole.id)) {
+                  return message.sendMessage("Я не буду тебе подчинатся.");
+                };
+                if(!args){
+                  return message.reply("Ты не указал(-а), что нужно сказать")
+                }
+                message.channel.sendMessage(args.join(" "));
+                break;
+              }
             default: {
+              message.delete();
               message.channel.sendMessage("Окееей. Я не понял.");
               break;
             } // конец дефаулта
