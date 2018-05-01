@@ -3,10 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "NTXbot.js",
-  "scripts": {
-    "start": "node NTXbot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,5 +20,13 @@
     "opusscript": "0.0.6",
     "sleep": "^5.1.1",
     "uws": "^9.14.0"
-  }
+  },
+    "scripts": {
+      "start": "node NTXbot.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "engines": {
+      "node": "8.11.x",
+      "npm": "6.0.x"
+    }
 }
