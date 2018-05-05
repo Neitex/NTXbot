@@ -50,14 +50,14 @@ ntx.on('ready', () => {
     ntx.user.setGame("!помощь");
     console.log(`              Скрипт от Neitex'a`);
     console.log(`           Скрипт работает стабильно` );
-    console.log(` Скрипт подключён к дискорду как ${ntx.user.tag}!`);
+    console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
   });
 //-----------Скрипт готов к работе-----\\
-console.log("INIT DONE!")
+console.log("INIT DONE!");
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
   member.guild.channels.find("name", "основной-чатик").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
-  let human_role = member.guild.channels.find("name", "Человек");
+  let human_role = member.guild.roles.find("name", "Человек");
   member.addRole(human_role).catch(console.error);
   member.guild.createRole({
     name: member.user.username,
@@ -80,6 +80,11 @@ ntx.on("guildMemberRemove", function (member) {
 //-----------Блок комманд--------------\\
 ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
+  if (message.channel.name === undefined) {
+    message.reply("Ошибка! Код ошибки: 0x01EW2190")
+    message.reply("Ошибка проверена: невозможно выполнять команды в Личных Сообщениях.")
+    message.reply("Решение: Зайди на сервер. В ЛС бот не может выполнить команду.")
+  }
         if(!message.content.startsWith(config.prefix)) return;
         var command = message.content.substring(config.prefix.length).split(" ");
         var command_args = command.slice();

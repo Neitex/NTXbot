@@ -19,7 +19,7 @@ function randomHexColor() {
   .addField("NTXbot (NTXbot)", "Ну а как же без меня?)")
   .addField("Арсений (стоп. его тоже нужно вписать?)", "Он ниже меня по рангу)");
 }
-
+  var servers = [];
   {
     var phones = new Discord.RichEmbed()
     .setColor(randomHexColor())
@@ -56,7 +56,7 @@ function randomHexColor() {
 //-----------установка констант--------\\
 
 //-----------подключаемся к дикорду----\\
-ntx.login(process.env.BOT_TOKEN);
+ntx.login("NDI0NTQyODM4NjUxMzU1MTM4.Dc-ZtA.PyDsdyVaD9ZHstfuSjioMDQYc48");
 ntx.on('ready', () => {
     ntx.user.setGame("!помощь");
     console.log(`              Скрипт от Neitex'a`);
@@ -91,6 +91,12 @@ ntx.on("guildMemberRemove", function (member) {
 //-----------Блок комманд--------------\\
 ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
+  if (message.channel.name === undefined) {
+    message.reply("Ошибка! Код ошибки: 0x01EW2190")
+    message.reply("Ошибка проверена: невозможно выполнять команды в Личных Сообщениях.")
+    message.reply("Решение: Зайди на сервер. В ЛС бот не может выполнить команду.")
+    return;
+  }
         if(!message.content.startsWith(config.prefix)) return;
         var command = message.content.substring(config.prefix.length).split(" ");
 
