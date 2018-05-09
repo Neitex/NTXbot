@@ -56,7 +56,7 @@ ntx.on('ready', () => {
 console.log("INIT DONE!");
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
-  member.guild.channels.find("name", "основной-чатик").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
+  member.guild.channels.find("name", "чат").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
   let human_role = member.guild.roles.find("name", "Человек");
   member.addRole(human_role).catch(console.error);
   member.guild.createRole({
