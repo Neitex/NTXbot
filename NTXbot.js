@@ -136,7 +136,7 @@ ntx.on('message', function(message){
                 break;
               } // 
               case "кикни": {
-               let modRole = message.guild.roles.find("name", "ВИП");
+               let modRole = message.guild.roles.find("name", "ДЕПУТАТЫ");
                message.delete();
                if(!message.member.roles.has(modRole.id)){
                  return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
@@ -167,7 +167,7 @@ ntx.on('message', function(message){
                 break;
               }
               case "скажи": {
-                let modRole = message.guild.roles.find("name", "ВИП");
+                let modRole = message.guild.roles.find("name", "ДЕПУТАТЫ");
                 message.delete();
                 if(!message.member.roles.has(modRole.id)) {
                   return message.channel.sendMessage("Я не буду тебе подчинатся.");
@@ -176,6 +176,10 @@ ntx.on('message', function(message){
                   return message.reply("Ты не указал(-а), что нужно сказать")
                 }
                 message.channel.sendMessage(args.join(" "));
+                break;
+              }
+              case "" : {
+
                 break;
               }
             default: {
