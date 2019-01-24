@@ -6,32 +6,8 @@ const bot = ntx;
 function randomHexColor() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
-{
-   var mabyfuns = new Discord.RichEmbed()
-  .setAuthor("NTXbot")
-  .setColor(randomHexColor())
-  .setFooter("Теперь ты знаешь всех актёров MabyFuns. Ещё есть !телефоны")
-  .addField("ПИНОКИА (Neitex)", "Маленький. Очень. Имеет заниженную самооценку. Могёт.")
-  .addField("РЭПЕР 228 (ColdWaker)", "Лудшый репер на мире. Могёт.")
-  .addField("АШОТ (RUD)", "Живёт в шикарной квартире  у толчка. Птица летит")
-  .addField("БОЛЬШОЙ (Artur)", "Растопчит и убьёт кого угодно и когда угодно. Рост - over9999.")
-  .addField("NTXbot (NTXbot)", "Орёл ест птицу.")
-  .addField("ПАРИКМАХЕР (WaferiCF)", "Может случайно убить.");
-}
 
-  {
-    var phones = new Discord.RichEmbed()
-    .setColor(randomHexColor())
-    .setAuthor("NTXbot")
-    .setFooter("Ода. Ты можешь им позвонить.")
-    .addField("ПИНОКИА (Neitex)", "+375 (44) 559-95-01 ")
-    .addField("РЭПЕР 228 (ColdWaker)", "+375 (33) 614-53-41 " )
-    .addField("АШОТ (RUD)", "+375 (29) 246-22-42 ")
-    .addField("БОЛЬШОЙ (Artur)", "+375 (29) 333-73-03 (Редко отвечает) ")
-    .addField("NTXbot (NTXbot)", "Я бот так-то. У меня его нет")
-    .addField("ПАРИКМАХЕР (WaferiCF)", "+375 (44) 731-20-24 ");
-  }
-
+ 
   {
     var help = new Discord.RichEmbed()
     .setAuthor("NTXbot")
@@ -56,9 +32,6 @@ ntx.on('ready', () => {
 console.log("INIT DONE!");
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
-  member.guild.channels.find("name", "чатик").sendMessage(member.toString() + ", приветствую на сервере! Для помощи напиши !помощь");
-  let human_role = member.guild.roles.find("name", "Человек");
-  member.addRole(human_role).catch(console.error);
   member.guild.createRole({
     name: member.user.username,
     color: randomHexColor(),
@@ -72,7 +45,6 @@ ntx.on("guildMemberAdd", function (member) {
 
 ntx.on("guildMemberRemove", function (member) {
     var temprole = member.guild.roles.find("name", "${member.user.username}");
-  member.guild.channels.find("name", "чатик").sendMessage(member.toString() + "ушёл с сервера. Удачи! Надеюсь, ты получил(-а) удовольствие!");
   sleep.sleep(2);
       member.guild.roles.find("name", member.user.username).delete();
 });
@@ -136,7 +108,7 @@ ntx.on('message', function(message){
                 break;
               } // 
               case "кикни": {
-               let modRole = message.guild.roles.find("name", "ДЕПУТАТЫ");
+               let modRole = message.guild.roles.find("name", "ОДМЕН");
                message.delete();
                if(!message.member.roles.has(modRole.id)){
                  return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
@@ -167,7 +139,7 @@ ntx.on('message', function(message){
                 break;
               }
               case "скажи": {
-                let modRole = message.guild.roles.find("name", "ДЕПУТАТЫ");
+                let modRole = message.guild.roles.find("name", "ХАКЕР");
                 message.delete();
                 if(!message.member.roles.has(modRole.id)) {
                   return message.channel.sendMessage("Я не буду тебе подчинатся.");
