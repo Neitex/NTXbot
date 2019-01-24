@@ -46,7 +46,7 @@ ntx.on("guildMemberAdd", function (member) {
 ntx.on("guildMemberRemove", function (member) {
     var temprole = member.guild.roles.find("name", "${member.user.username}");
   sleep.sleep(2);
-      member.guild.roles.find("name", member.user.username).delete();
+      member.guild.roles.find("name", member.user.username).delete().catch(console.error());
 });
 
 //-----------Блок комманд--------------\\
