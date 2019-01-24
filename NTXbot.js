@@ -23,7 +23,7 @@ function randomHexColor() {
 //-----------подключаемся к дикорду----\\
 ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
-    ntx.user.setGame("!помощь");
+    ntx.user.setGame("?помощь");
     console.log(`              Скрипт от Neitex'a`);
     console.log(`           Скрипт работает стабильно` );
     console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
@@ -78,16 +78,6 @@ ntx.on('message', function(message){
               message.channel.send("Не понял вопроса");
               break;
             } //конец оскорбления
-            case "mabyfuns":{
-              message.delete();
-              message.author.sendEmbed(mabyfuns);
-                break;
-              } //конец представления илиты
-              case "телефоны": {
-                message.delete(1);
-                message.author.sendEmbed(phones);
-                break;
-              } //конец телефонов
               case "помощь": {
                 message.delete();
                 message.author.sendEmbed(help);
