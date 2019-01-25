@@ -1,4 +1,6 @@
 {
 "prefix" : "?",
-"bot_creator" : "409618304832110594"
+"bot_creator" : "409618304832110594",
+"log_channel" : "bot-log",
+"main_channel" : "обсчение"
 }

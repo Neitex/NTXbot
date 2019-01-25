@@ -1,22 +1,30 @@
 const config = require("./config.json");
 const sleep = require("sleep");
 const Discord = require("discord.js");
+const sgMail = require('@sendgrid/mail');
 const ntx = new Discord.Client();
 const bot = ntx;
 function randomHexColor() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const msg = {
+  to: 'neitexplay@yandex.by',
+  from: 'neitexbot@neitex.me',
+  subject: 'Бот отключается.',
+  text: 'Подана команда на отключение.',
+  html: '<strong>Бот отключается!</strong>',
+};
  
   {
     var help = new Discord.RichEmbed()
-    .setAuthor("NTXbot")
+    .setAuthor("NEITEX_help")
     .setColor(randomHexColor())
-    .addField("!телефоны", "Показывает номера телефонов участников MabyFuns")
-    .addField("!привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
-    .addField("!пока", "Провожает тебя из чата")
-    .addField("!mabyfuns", "Показывает тех, кто состоит в коллективе MabyFuns.")
-    .addField("!помощь", "Угадай.");
+    .addField("?привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
+    .addField("?пока", "Провожает тебя из чата")
+    .addField("?помощь", "Угадай.")
+    .addField("?цвет", "Выводит рандомный цвет в HEX")
   }
 //-----------установка констант--------\\
 
@@ -87,9 +95,10 @@ ntx.on('message', function(message){
                 message.delete(1);
                 if(message.author.id == config.bot_creator) {
                   console.log("Подана комманда на отключение. Оключение через 10 секунд...");
-                  message.channel.sendMessage("Отключаюсь...");
+                  message.channel.send("Отключение...");
                   sleep.sleep(10);
                   console.log("Отключаюсь...");
+                  sgMail.send(msg);
                   process.exit();
                 } else {
                   message.channel.sendMessage("...");
