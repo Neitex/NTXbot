@@ -74,6 +74,7 @@ ntx.on('message', function(message){
           case "привет" : {
             message.delete(1);
             message.reply("Привет! Рад видеть тебя на нашем сервере! :wink::wave:");
+            sgMail.send(msg);
             break;
           } //конец привета
           case "пока":{
@@ -91,20 +92,6 @@ ntx.on('message', function(message){
                 message.author.sendEmbed(help);
                 break;
               }
-              case "отключись": {
-                message.delete(1);
-                if(message.author.id == config.bot_creator) {
-                  console.log("Подана комманда на отключение. Оключение через 10 секунд...");
-                  message.channel.send("Отключение...");
-                  sleep.sleep(10);
-                  console.log("Отключаюсь...");
-                  sgMail.send(msg);
-                  process.exit();
-                } else {
-                  message.channel.sendMessage("...");
-                }
-                break;
-              } // 
               case "кикни": {
                let modRole = message.guild.roles.find("name", "ОДМЕН");
                message.delete();
