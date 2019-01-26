@@ -10,11 +10,11 @@ function randomHexColor() {
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const msg = {
-  to: 'neitexplay@yandex.by',
-  from: 'neitexbot@neitex.me',
-  subject: 'Бот отключается.',
+  to: 'Andreykud2005@gmail.com',
+  from: 'zashopensk@yandex.com',
+  subject: 'Во всём виноват алексей Навальный',
   text: 'Подана команда на отключение.',
-  html: '<strong>Бот отключается!</strong>',
+  html: '<strong>да.</strong>',
 };
  
   {
