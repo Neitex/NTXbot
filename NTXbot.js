@@ -26,9 +26,8 @@ function randomInt(min,max) // min and max included
 console.log(` Префикс: ${config.prefix}`)
 ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
-    ntx.user.setActivity("парашу", {type:'WATCHING'});
+    ntx.user.setActivity("музыку лучше, чем у тебя", {type:'LISTENING'});
     console.log(`              Скрипт от Neitex'a`);
-
     console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
   });
 //-----------Скрипт готов к работе-----\\
@@ -55,7 +54,7 @@ ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
   if (message.channel.type === "dm")
     message.reply("Уйди на сервер, пожалуйста.")
-        if(!message.content.startsWith(config.prefix)) {
+        if(!message.content.startsWith(config.prefix) && !message.channel === config.norules_channel) {
           var words = message.content.split(" ");
           for(var i = 0; i< words.length; i++){
             words[i] = words[i].toLowerCase();
@@ -83,11 +82,6 @@ ntx.on('message', function(message){
         args = command_args;
 
         switch (command[0].toLowerCase()) {
-          case "привет" : {
-            message.delete(1);
-            message.reply("Привет! Рад видеть тебя на сервере " + ntx.guild.name + "! :wink::wave:");
-            break;
-          } //конец привета
           case "тылох": {
               message.delete();
               message.reply("Сам такой.");
