@@ -1,6 +1,10 @@
 {
-"prefix" : "?",
+"prefix" : "!",
 "bot_creator" : "409618304832110594",
 "log_channel" : "bot-log",
-"main_channel" : "обсчение"
+"main_channel" : "общение",
+"warn_message_mat" : "прочитай правило №1 в канале #правила, и больше так не делай",
+"mod_role" : "Модератор",
+"admin_role" : "Администратор",
+"vote_channel": "601710878324162560"
 }

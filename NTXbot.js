@@ -1,22 +1,15 @@
+require('dotenv').config();
 const config = require("./config.json");
-const sleep = require("sleep");
 const Discord = require("discord.js");
-const sgMail = require('@sendgrid/mail');
 const ntx = new Discord.Client();
 const bot = ntx;
 function randomHexColor() {
-  return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  return Math.floor(Math.random() * 16777215).toString(16);
 }
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-const msg = {
-  to: 'Andreykud2005@gmail.com',
-  from: 'zashopensk@yandex.com',
-  subject: 'Во всём виноват алексей Навальный',
-  text: 'Подана команда на отключение.',
-  html: '<strong>да.</strong>',
-};
- 
+function randomInt(min,max) // min and max included
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
   {
     var help = new Discord.RichEmbed()
     .setAuthor("NEITEX_help")
@@ -26,14 +19,16 @@ const msg = {
     .addField("?помощь", "Угадай.")
     .addField("?цвет", "Выводит рандомный цвет в HEX")
   }
+  var args;
 //-----------установка констант--------\\
 
 //-----------подключаемся к дикорду----\\
+console.log(` Префикс: ${config.prefix}`)
 ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
-    ntx.user.setGame("?помощь");
+    ntx.user.setActivity("парашу", {type:'WATCHING'});
     console.log(`              Скрипт от Neitex'a`);
-    console.log(`           Скрипт работает стабильно` );
+
     console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
   });
 //-----------Скрипт готов к работе-----\\
@@ -52,39 +47,50 @@ ntx.on("guildMemberAdd", function (member) {
 //-----------Блок удаления роли--------\\
 
 ntx.on("guildMemberRemove", function (member) {
-  sleep.sleep(2);
       member.guild.roles.find("name", member.user.username).delete().catch(console.error());
 });
 
 //-----------Блок комманд--------------\\
 ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
-  if (message.channel.name === undefined) {
-    message.reply("Ошибка! Код ошибки: 0x01EW2190")
-    message.reply("Ошибка проверена: невозможно выполнять команды в Личных Сообщениях.")
-    message.reply("Решение: Зайди на сервер. В ЛС бот не может выполнить команду.")
-  }
-        if(!message.content.startsWith(config.prefix)) return;
+  if (message.channel.type === "dm")
+    message.reply("Уйди на сервер, пожалуйста.")
+        if(!message.content.startsWith(config.prefix)) {
+          var words = message.content.split(" ");
+          for(var i = 0; i< words.length; i++){
+            words[i] = words[i].toLowerCase();
+          }
+          for (var i = 0; i < words.length;i++){
+            console.log(words[i].slice(words[i].length-2,words[i].length));
+            if(!(words[i].slice(words[i].length-2,words[i].length).includes("||") &&
+                words[i].slice(0,2).includes("||")) &&
+              (words[i].includes("бля") || words[i].includes("хуй") || words[i].includes("пизд")||
+               words[i].includes("пидо")||words[i].includes("пидр")|| words[i].includes("еба")||
+               words[i].includes("ёба"))){
+            message.delete();
+            message.reply(config.warn_message_mat)
+            .then (function (ban){
+              ban.delete(1000 * 3);
+            });
+            
+            return;
+            }
+          }
+        }else{
         var command = message.content.substring(config.prefix.length).split(" ");
         var command_args = command.slice();
         command_args.shift();
-        var args = command_args;
+        args = command_args;
 
         switch (command[0].toLowerCase()) {
           case "привет" : {
             message.delete(1);
-            message.reply("Привет! Рад видеть тебя на нашем сервере! :wink::wave:");
-            sgMail.send(msg);
+            message.reply("Привет! Рад видеть тебя на сервере " + ntx.guild.name + "! :wink::wave:");
             break;
           } //конец привета
-          case "пока":{
-          message.delete();
-          message.reply("Пока. Возвращайся скорей :wink:");
-          break;
-          } //конец пока
           case "тылох": {
               message.delete();
-              message.channel.send("Не понял вопроса");
+              message.reply("Сам такой.");
               break;
             } //конец оскорбления
               case "помощь": {
@@ -93,7 +99,7 @@ ntx.on('message', function(message){
                 break;
               }
               case "кикни": {
-               let modRole = message.guild.roles.find("name", "ОДМЕН");
+               let modRole = message.guild.roles.find("name", config.admin_role);
                message.delete();
                if(!message.member.roles.has(modRole.id)){
                  return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
@@ -120,11 +126,11 @@ ntx.on('message', function(message){
               } //конец кика
               case "цвет": {
                 message.delete();
-                message.channel.sendMessage("Рандомный цвет в HEX: " + randomHexColor()).catch(console.error);
+                message.channel.sendMessage("Рандомный цвет в HEX: #" + randomHexColor()).catch(console.error);
                 break;
               }
               case "скажи": {
-                let modRole = message.guild.roles.find("name", "ХАКЕР");
+                let modRole = message.guild.roles.find("name", config.modRole);
                 message.delete();
                 if(!message.member.roles.has(modRole.id)) {
                   return message.channel.sendMessage("Я не буду тебе подчинатся.");
@@ -135,17 +141,42 @@ ntx.on('message', function(message){
                 message.channel.sendMessage(args.join(" "));
                 break;
               }
-              case "" : {
-
+              case "монетка" : {
+                message.delete();
+                var side = randomInt(0,1);
+                message.reply(side);
+                if(side === 0)
+                message.reply("Орёл.");
+                else 
+                message.reply("Решка.");
+                break;
+              }
+              case "голосование":{
+                message.delete();
+                if (!args){
+                  return message.reply("Ты не выбрал(-а) тему голосования");
+                } else{
+                message.channel.send("0x" + "0x" + randomHexColor());
+                var voteEmbed = new Discord.RichEmbed()
+                .setColor("0x" + randomHexColor())
+                .setTitle("Голосование")
+                .setDescription("От: " + message.author.username)
+                .addField("Тема: ",args.join(" "))
+                .setFooter("Голосуйте нажатием на реакцию");
+                ntx.channels.get(config.vote_channel).sendEmbed(voteEmbed)
+                .then (function (message){
+                message.pin();
+                message.react('✅').then(() => message.react('❎'));
+                });}
                 break;
               }
             default: {
               message.delete();
-              message.channel.sendMessage("Окееей. Я не понял.");
+              message.channel.sendMessage("Команду я не понял.");
               break;
             } // конец дефаулта
         } 
-
+      }
 
 
 

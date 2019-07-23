@@ -1,4 +1,5 @@
 
 config.json
 *.yml
+.env
 /node_modules/
