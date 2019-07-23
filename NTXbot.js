@@ -54,7 +54,7 @@ ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
   if (message.channel.type === "dm")
     message.reply("Уйди на сервер, пожалуйста.")
-        if(!message.content.startsWith(config.prefix) && !message.channel === config.norules_channel) {
+        if(!message.content.startsWith(config.prefix) && message.channel !== config.norules_channel) {
           var words = message.content.split(" ");
           for(var i = 0; i< words.length; i++){
             words[i] = words[i].toLowerCase();
@@ -80,21 +80,18 @@ ntx.on('message', function(message){
         var command_args = command.slice();
         command_args.shift();
         args = command_args;
-
+        message.delete(10);
         switch (command[0].toLowerCase()) {
-          case "тылох": {
-              message.delete();
+          case "ты": {
               message.reply("Сам такой.");
               break;
             } //конец оскорбления
               case "помощь": {
-                message.delete();
                 message.author.sendEmbed(help);
                 break;
               }
               case "кикни": {
                let modRole = message.guild.roles.find("name", config.admin_role);
-               message.delete();
                if(!message.member.roles.has(modRole.id)){
                  return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
                }
@@ -119,13 +116,11 @@ ntx.on('message', function(message){
                 break;
               } //конец кика
               case "цвет": {
-                message.delete();
                 message.channel.sendMessage("Рандомный цвет в HEX: #" + randomHexColor()).catch(console.error);
                 break;
               }
               case "скажи": {
                 let modRole = message.guild.roles.find("name", config.modRole);
-                message.delete();
                 if(!message.member.roles.has(modRole.id)) {
                   return message.channel.sendMessage("Я не буду тебе подчинатся.");
                 };
@@ -136,7 +131,6 @@ ntx.on('message', function(message){
                 break;
               }
               case "монетка" : {
-                message.delete();
                 var side = randomInt(0,1);
                 message.reply(side);
                 if(side === 0)
@@ -146,7 +140,6 @@ ntx.on('message', function(message){
                 break;
               }
               case "голосование":{
-                message.delete();
                 if (!args[1]){
                 message.reply("Ты не выбрал(-а) тему голосования");
                 break;
@@ -159,7 +152,6 @@ ntx.on('message', function(message){
                 .setFooter("Голосуйте нажатием на реакцию");
                 ntx.channels.get(config.vote_channel).sendEmbed(voteEmbed)
                 .then (function (message){
-                message.pin();
                 message.react('✅').then(() => message.react('❎'));
                 });}
                 break;
