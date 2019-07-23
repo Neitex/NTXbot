@@ -156,7 +156,6 @@ ntx.on('message', function(message){
                 if (!args){
                   return message.reply("Ты не выбрал(-а) тему голосования");
                 } else{
-                message.channel.send("0x" + "0x" + randomHexColor());
                 var voteEmbed = new Discord.RichEmbed()
                 .setColor("0x" + randomHexColor())
                 .setTitle("Голосование")
