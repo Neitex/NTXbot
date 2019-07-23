@@ -54,7 +54,7 @@ ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
   if (message.channel.type === "dm")
     message.reply("Уйди на сервер, пожалуйста.")
-        if(!message.content.startsWith(config.prefix) && message.channel !== config.norules_channel) {
+        if(!message.content.startsWith(config.prefix) && message.channel.id !== config.norules_channel) {
           var words = message.content.split(" ");
           for(var i = 0; i< words.length; i++){
             words[i] = words[i].toLowerCase();
