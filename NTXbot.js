@@ -54,13 +54,14 @@ ntx.on('message', function(message){
         if(message.author.equals(ntx.user)) return;
   if (message.channel.type === "dm")
     message.reply("Уйди на сервер, пожалуйста.")
-        if(!message.content.startsWith(config.prefix) && message.channel.id !== config.norules_channel) {
+        if(!message.content.startsWith(config.prefix)) {
+          if(message.channel.id === config.norules_channel) return;
           var words = message.content.split(" ");
           for(var i = 0; i< words.length; i++){
             words[i] = words[i].toLowerCase();
           }
           for (var i = 0; i < words.length;i++){
-            console.log(words[i].slice(words[i].length-2,words[i].length));
+            // console.log(words[i].slice(words[i].length-2,words[i].length));
             if(!(words[i].slice(words[i].length-2,words[i].length).includes("||") &&
                 words[i].slice(0,2).includes("||")) &&
               (words[i].includes("бля") || words[i].includes("хуй") || words[i].includes("пизд")||
@@ -93,55 +94,71 @@ ntx.on('message', function(message){
               case "кикни": {
                let modRole = message.guild.roles.find("name", config.admin_role);
                if(!message.member.roles.has(modRole.id)){
-                 return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error);
+                 return message.reply("Не-а. Ты имеешь недостаточно власти для этого.").catch(console.error)
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
                if(message.mentions.users.size === 0){
-                 return message.reply("Сорян, некого кикать. @упомяни человека (да, так как я упомянул тебя).").catch(console.error);
+                 return message.reply("Сорян, некого кикать. @упомяни человека (да, так как я упомянул тебя).").catch(console.error)
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
                let kickMember = message.guild.member(message.mentions.users.first());
                if(!kickMember) {
-                 return message.channel.sendMessage("Не-а. Такого человека на сервере нет.").catch(console.error);
+                 return message.channel.sendMessage("Не-а. Такого человека на сервере нет.").catch(console.error)
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
                if(kickMember === config.bot_creator) {
-                 return message.reply("тоесть... ты... хочешь... Что бы я кикнул админа?.. Не-а. /shrug").catch(console.error);
+                 return message.reply("тоесть... ты... хочешь... Что бы я кикнул админа?.. Не-а. /shrug").catch(console.error)
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
                if(!message.guild.member(bot.user).hasPermission("KICK_MEMBERS")) {
-                 return message.channel.sendMessage("Не-а. Админ - идиот, который не разрешил мне кикать.");
+                 return message.channel.sendMessage("Не-а. Админ - идиот, который не разрешил мне кикать.")
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
-               console.log(kickMember.u);
+               console.log(kickMember.user);
                kickMember.kick().then(member => {
-                 message.reply("Я кикнул ${kickmember}. Удачи ему.");
+                 message.reply('Я кикнул ' + kickmember.user + 'Удачи ему.')
+                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
 
                }).catch(console.error);
                 break;
               } //конец кика
               case "цвет": {
-                message.channel.sendMessage("Рандомный цвет в HEX: #" + randomHexColor()).catch(console.error);
+                message.channel.sendMessage("Рандомный цвет в HEX: #" + randomHexColor()).catch(console.error)
+                .then (function (bot_msg) {bot_msg.delete(1000*10)} );
                 break;
               }
-              case "скажи": {
-                let modRole = message.guild.roles.find("name", config.modRole);
-                if(!message.member.roles.has(modRole.id)) {
-                  return message.channel.sendMessage("Я не буду тебе подчинатся.");
-                };
-                if(!args){
-                  return message.reply("Ты не указал(-а), что нужно сказать")
+              case "удали" :{
+                let modRole = message.guild.roles.find("name", config.mod_role);
+                if(!message.member.roles.has(modRole.id)){
+                  message.reply("У тебя нету права. Это может только Модератор.")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} )
+                  break;
                 }
-                message.channel.sendMessage(args.join(" "));
+                if (!args[0]){
+                  message.reply("Ты не указал(-а), сколько сообщений удалить")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                  break;
+                }
+                message.channel.bulkDelete(Number(args[0]) +1);
+                message.channel.send("Я удалил ``" + args[0] + "`` сообщений для вас! :white_check_mark:")
+                .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                 break;
               }
               case "монетка" : {
                 var side = randomInt(0,1);
                 message.reply(side);
                 if(side === 0)
-                message.reply("Орёл.");
+                message.reply("Орёл.")
+                .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                 else 
-                message.reply("Решка.");
+                message.reply("Решка.")
+                .then (function (bot_msg) {bot_msg.delete(1000*120)} );
                 break;
               }
               case "голосование":{
-                if (!args[1]){
-                message.reply("Ты не выбрал(-а) тему голосования");
+                if (!args[0]){
+                message.reply("Ты не выбрал(-а) тему голосования")
+                .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                 break;
                 } else{
                 var voteEmbed = new Discord.RichEmbed()
@@ -158,7 +175,8 @@ ntx.on('message', function(message){
               }
             default: {
               message.delete();
-              message.channel.sendMessage("Команду я не понял.");
+              message.channel.sendMessage("Команду я не понял.")
+              .then (function (bot_msg) {bot_msg.delete(1000*5)} );
               break;
             } // конец дефаулта
         } 
