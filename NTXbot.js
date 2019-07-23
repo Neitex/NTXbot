@@ -153,8 +153,9 @@ ntx.on('message', function(message){
               }
               case "голосование":{
                 message.delete();
-                if (!args){
-                  return message.reply("Ты не выбрал(-а) тему голосования");
+                if (!args[1]){
+                message.reply("Ты не выбрал(-а) тему голосования");
+                break;
                 } else{
                 var voteEmbed = new Discord.RichEmbed()
                 .setColor("0x" + randomHexColor())
