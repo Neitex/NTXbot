@@ -1,10 +1,8 @@
 require('dotenv').config();
-const config = require("./config.json");
-
-if(process.env.STAGE == "DEV"){
-const config = require("./test.json");
-}
-else{ const config = require("./config.json");}
+if(process.env.STAGE === "DEV"){
+  var configpath = "./test.json";
+} else {var configpath = "./config.json";}
+const config = require(configpath);
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
 const bot = ntx;
@@ -15,6 +13,10 @@ function randomInt(min,max) // min and max included
 {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
+function sleep(ms) {
+  ms += new Date().getTime();
+  while (new Date() < ms){}
+  } 
   {
     var help = new Discord.RichEmbed()
     .setAuthor("NEITEX_help")
@@ -27,6 +29,7 @@ function randomInt(min,max) // min and max included
   var args;
 //-----------установка констант--------\\
 //--выводим настройки из congig.json --\\
+sleep(1000);
 console.log(`Режим запуска: "${process.env.STAGE}"`);
 console.log(`Загруженный файл конфига: "${config.STAGE}"`)
 console.log(`Префикс бота: "${config.prefix}"`);
