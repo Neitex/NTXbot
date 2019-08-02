@@ -1,5 +1,10 @@
 require('dotenv').config();
 const config = require("./config.json");
+
+if(process.env.STAGE == "DEV"){
+const config = require("./test.json");
+}
+else{ const config = require("./config.json");}
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
 const bot = ntx;
@@ -21,9 +26,16 @@ function randomInt(min,max) // min and max included
   }
   var args;
 //-----------установка констант--------\\
-
+//--выводим настройки из congig.json --\\
+console.log(`Режим запуска: "${process.env.STAGE}"`);
+console.log(`Загруженный файл конфига: "${config.STAGE}"`)
+console.log(`Префикс бота: "${config.prefix}"`);
+console.log(`Ответ на сообщение с матом: "${config.warn_message_mat}"`);
+console.log(`Роль администратора: "${config.admin_role}"`);
+console.log(`Роль модератора: "${config.mod_role}"`);
+console.log(`Канал для голосований: "${config.vote_channel}"`);
+console.log(`Канал с матом: "${config.norules_channel}"`);
 //-----------подключаемся к дикорду----\\
-console.log(` Префикс: ${config.prefix}`)
 ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
     ntx.user.setActivity("музыку лучше, чем у тебя", {type:'LISTENING'});
@@ -31,7 +43,6 @@ ntx.on('ready', () => {
     console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
   });
 //-----------Скрипт готов к работе-----\\
-console.log("INIT DONE!");
 //-----------Блок приветствия----------\\
 ntx.on("guildMemberAdd", function (member) {
   member.guild.createRole({
@@ -55,18 +66,18 @@ ntx.on('message', function(message){
   if (message.channel.type === "dm")
     message.reply("Уйди на сервер, пожалуйста.")
         if(!message.content.startsWith(config.prefix)) {
-          if(message.channel.id === config.norules_channel) return;
+          if(message.channel.id == config.norules_channel) return;
           var words = message.content.split(" ");
           for(var i = 0; i< words.length; i++){
             words[i] = words[i].toLowerCase();
           }
           for (var i = 0; i < words.length;i++){
-            // console.log(words[i].slice(words[i].length-2,words[i].length));
             if(!(words[i].slice(words[i].length-2,words[i].length).includes("||") &&
                 words[i].slice(0,2).includes("||")) &&
               (words[i].includes("бля") || words[i].includes("хуй") || words[i].includes("пизд")||
                words[i].includes("пидо")||words[i].includes("пидр")|| words[i].includes("еба")||
                words[i].includes("ёба"))){
+            console.log(message.author + " отправил(-а) сообщение с матом в общем канале " + message.channel.id);
             message.delete();
             message.reply(config.warn_message_mat)
             .then (function (ban){
@@ -106,10 +117,6 @@ ntx.on('message', function(message){
                  return message.channel.sendMessage("Не-а. Такого человека на сервере нет.").catch(console.error)
                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
                }
-               if(kickMember === config.bot_creator) {
-                 return message.reply("тоесть... ты... хочешь... Что бы я кикнул админа?.. Не-а. /shrug").catch(console.error)
-                 .then (function (bot_msg) {bot_msg.delete(1000*5)} );
-               }
                if(!message.guild.member(bot.user).hasPermission("KICK_MEMBERS")) {
                  return message.channel.sendMessage("Не-а. Админ - идиот, который не разрешил мне кикать.")
                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
@@ -141,7 +148,7 @@ ntx.on('message', function(message){
                 }
                 message.channel.bulkDelete(Number(args[0]) +1);
                 message.channel.send("Я удалил ``" + args[0] + "`` сообщений для вас! :white_check_mark:")
-                .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                .then (function (bot_msg) {bot_msg.delete(1000*5).catch(console.error)} );
                 break;
               }
               case "монетка" : {

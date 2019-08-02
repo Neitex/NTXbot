@@ -1,11 +1,9 @@
 {
 "prefix" : "!",
-"bot_creator" : "409618304832110594",
-"log_channel" : "bot-log",
-"main_channel" : "общение",
 "warn_message_mat" : "прочитай правило №1 в канале #правила, и больше так не делай",
 "mod_role" : "Модератор",
 "admin_role" : "Администратор",
 "vote_channel" : "603210373495128065",
-"norules_channel" : "603210373495128065"
+"norules_channel" : "603210373495128065",
+"STAGE" : "PRODUCTION"
 }
