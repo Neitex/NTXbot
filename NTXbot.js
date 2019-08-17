@@ -19,7 +19,7 @@ function sleep(ms) {
   } 
   {
     var help = new Discord.RichEmbed()
-    .setAuthor("NEITEX_help")
+    .setAuthor("NEITEX")
     .setColor(randomHexColor())
     .addField("?привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
     .addField("?пока", "Провожает тебя из чата")
@@ -182,6 +182,64 @@ ntx.on('message', function(message){
                 message.react('✅').then(() => message.react('❎'));
                 });}
                 break;
+              }
+              case "сквад+":{
+                if (!args[0]){
+                  message.reply("Ты не вписал (-а) название сквада!")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                  break;
+                }
+                  let squadExists = message.guild.roles.find("name",args[0] + " squad");
+                  var squadRole;
+                  if(squadExists){
+                    message.reply("Этот сквад уже существует!")
+                    .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                  } else{
+                    message.guild.createRole({
+                      name: args[0] + " squad",
+                      color: "0x"+randomHexColor(),
+                      permissions: [],
+                    }).then(function(role) {
+                      message.member.addRole(role).catch(console.error);
+                      message.guild.createChannel(args[0]+" squad",{
+                      type: 'text',
+                      permissionOverwrites: [{
+                        id: message.guild.id,
+                        deny:['READ_MESSAGES','MANAGE_MESSAGES']
+                      },{
+                        id: role.id,
+                        allow:['READ_MESSAGES'],
+                        deny:['MANAGE_MESSAGES']
+                      }]
+                    });}).catch(console.error);
+                  var squadEmbed = new Discord.RichEmbed()
+                  .setColor("0x" + randomHexColor())
+                  .setTitle(args[0] + " squad создан!")
+                  .addField("Создатель сквада: ",message.member.displayName)
+                  .addField("Роль участника сквада: ", args[0] + " squad")
+                  .addField("Чтобы войти в этот сквад напишите: ","!зайти " + args[0])
+                  .setFooter("Сквад создан!");
+                  message.channel.send(squadEmbed);
+                  }
+                break;
+              }
+              case "зайти":{
+                if (!args[0]){
+                  message.reply("Ты не вписал (-а) название сквада!")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                  break;
+                }
+                  let squadExists = message.guild.roles.find("name",args[0] + " squad");
+                  var squadRole;
+                  if(!squadExists){
+                    message.reply("Этого сквада не существует!")
+                    .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                    break;
+                  }
+                  let squadRoleToAdd = message.guild.roles.find("name", args[0] + " squad");
+                  message.member.addRole(squadRoleToAdd,"Попросил.").catch(console.error);
+                  message.reply("я добавил тебя в "+ squadRoleToAdd.name + "!");
+                  break;
               }
             default: {
               message.delete();
