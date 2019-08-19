@@ -31,7 +31,7 @@ function sleep(ms) {
 //--выводим настройки из congig.json --\\
 sleep(1000);
 console.log(`Режим запуска: "${process.env.STAGE}"`);
-console.log(`Загруженный файл конфига: "${config.STAGE}"`)
+console.log(`Загруженный файл конфига: "${configpath}"`)
 console.log(`Префикс бота: "${config.prefix}"`);
 console.log(`Ответ на сообщение с матом: "${config.warn_message_mat}"`);
 console.log(`Роль администратора: "${config.admin_role}"`);
@@ -197,12 +197,14 @@ ntx.on('message', function(message){
                   } else{
                     message.guild.createRole({
                       name: args[0] + " squad",
+                      position: squad_role_position,
                       color: "0x"+randomHexColor(),
                       permissions: [],
                     }).then(function(role) {
                       message.member.addRole(role).catch(console.error);
                       message.guild.createChannel(args[0]+" squad",{
                       type: 'text',
+                      parent: config.squad_parent_category,
                       permissionOverwrites: [{
                         id: message.guild.id,
                         deny:['READ_MESSAGES','MANAGE_MESSAGES']
@@ -240,6 +242,29 @@ ntx.on('message', function(message){
                   message.member.addRole(squadRoleToAdd,"Попросил.").catch(console.error);
                   message.reply("я добавил тебя в "+ squadRoleToAdd.name + "!");
                   break;
+              }
+              case "распусти": {
+                let moderRole = message.guild.roles.find("name", config.mod_role);
+                if(!message.member.roles.has(moderRole.id)){
+                  console.log(message.member.nickname + " попытался расформировать какой-то сквад.");
+                  message.reply("прости, но ты не имеешь права расформировывать сквады. Попроси об этом кого-нибудь с ролью @" + config.mod_role + ", хорошо?");
+                  break;
+                }
+                if(!args[0]){
+                  message.reply("ты не указал(-а), какой сквад нужно расформировать.")
+                  .then (function (bot_msg) {bot_msg.delete(1000*7)} );
+                  break;
+                }
+                let deleteSquadRole = message.guild.roles.find("name", args[0] + " squad");
+                if(!deleteSquadRole){
+                  message.reply("такого сквада итак не существует!")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} );
+                  break;
+                }
+                deleteSquadRole.delete("Потребавоно " + message.member.nickname);
+                let deleteSquadChannel = message.guild.channels.find("name", args[0] + "-squad");
+                deleteSquadChannel.delete("Потребавоно " + message.member.nickname).then(message.reply("готово! Сквад "+args[0] + " squad успешно расформирован!"))
+                break;
               }
             default: {
               message.delete();

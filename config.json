@@ -5,5 +5,7 @@
 "admin_role" : "Администратор",
 "vote_channel" : "603210373495128065",
 "norules_channel" : "601499481418104835",
-"STAGE" : "PRODUCTION"
+"STAGE" : "PRODUCTION",
+"squad_parent_category" : "612553588408975360",
+"squad_role_position" : 6
 }
