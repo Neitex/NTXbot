@@ -197,7 +197,7 @@ ntx.on('message', function(message){
                   } else{
                     message.guild.createRole({
                       name: args[0] + " squad",
-                      position: squad_role_position,
+                      position: config.squad_role_position,
                       color: "0x"+randomHexColor(),
                       permissions: [],
                     }).then(function(role) {
