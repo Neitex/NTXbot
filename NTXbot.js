@@ -6,6 +6,7 @@ const config = require(configpath);
 const Discord = require("discord.js");
 const ntx = new Discord.Client();
 const bot = ntx;
+const FFMPEG = require('ffmpeg-static');
 function randomHexColor() {
   return Math.floor(Math.random() * 16777215).toString(16);
 }
@@ -13,6 +14,8 @@ function randomInt(min,max) // min and max included
 {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
+var SongTitle = null;
+var Kill = false;
 function sleep(ms) {
   ms += new Date().getTime();
   while (new Date() < ms){}
@@ -21,10 +24,13 @@ function sleep(ms) {
     var help = new Discord.RichEmbed()
     .setAuthor("NEITEX")
     .setColor(randomHexColor())
-    .addField("?привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
-    .addField("?пока", "Провожает тебя из чата")
-    .addField("?помощь", "Угадай.")
-    .addField("?цвет", "Выводит рандомный цвет в HEX")
+    .addField("!привет", "Шлёт тебе приветствие (ты одинок(-a) если юзаешь это)")
+    .addField("!пока", "Провожает тебя из чата")
+    .addField("!помощь", "Угадай.")
+    .addField("!цвет", "Выводит рандомный цвет в HEX")
+    .addField("!радио","Без аргументов - выводит список радио. С названием радио - подключается к каналу радио и играет выбранное радио")
+    .addField("!останови", "Останавливает радио.")
+    .addField("!голосование", "Создаёт голосование реакциями.")
   }
   var args;
 //-----------установка констант--------\\
@@ -33,7 +39,7 @@ sleep(1000);
 console.log(`Режим запуска: "${process.env.STAGE}"`);
 console.log(`Загруженный файл конфига: "${configpath}"`)
 console.log(`Префикс бота: "${config.prefix}"`);
-console.log(`Ответ на сообщение с матом: "${config.warn_message_mat}"`);
+console.log(`Ответ на сообщение с матом: "${config.warn_message_cursed}"`);
 console.log(`Роль администратора: "${config.admin_role}"`);
 console.log(`Роль модератора: "${config.mod_role}"`);
 console.log(`Канал для голосований: "${config.vote_channel}"`);
@@ -41,27 +47,27 @@ console.log(`Канал с матом: "${config.norules_channel}"`);
 //-----------подключаемся к дикорду----\\
 ntx.login(process.env.BOT_TOKEN);
 ntx.on('ready', () => {
-    ntx.user.setActivity("музыку лучше, чем у тебя", {type:'LISTENING'});
+    ntx.user.setActivity('Помощь - !помощь. Сделано Neitex ом', {type:'CUSTOM_STATUS'});
     console.log(`              Скрипт от Neitex'a`);
     console.log(` Скрипт подключён к дискорду как ${ntx.user.username}!`);
   });
 //-----------Скрипт готов к работе-----\\
 //-----------Блок приветствия----------\\
-ntx.on("guildMemberAdd", function (member) {
-  member.guild.createRole({
-    name: member.user.username,
-    color: randomHexColor(),
-    permissions: [],
-  }).then(function (role) {
-    member.addRole(role).catch (console.error());
-  });
-});
+// ntx.on("guildMemberAdd", function (member) {
+//   member.guild.createRole({
+//     name: member.user.username,
+//     color: randomHexColor(),
+//     permissions: [],
+//   }).then(function (role) {
+//     member.addRole(role).catch (console.error());
+//   });
+// });
 
 //-----------Блок удаления роли--------\\
 
-ntx.on("guildMemberRemove", function (member) {
-      member.guild.roles.find("name", member.user.username).delete().catch(console.error());
-});
+// ntx.on("guildMemberRemove", function (member) {
+//       member.guild.roles.find("name", member.user.username).delete().catch(console.error());
+// });
 
 //-----------Блок комманд--------------\\
 ntx.on('message', function(message){
@@ -82,7 +88,7 @@ ntx.on('message', function(message){
                words[i].includes("ёба"))){
             console.log(message.author + " отправил(-а) сообщение с матом в общем канале " + message.channel.id);
             message.delete();
-            message.reply(config.warn_message_mat)
+            message.reply(config.warn_message_cursed)
             .then (function (ban){
               ban.delete(1000 * 3);
             });
@@ -95,7 +101,7 @@ ntx.on('message', function(message){
         var command_args = command.slice();
         command_args.shift();
         args = command_args;
-        message.delete(10);
+        message.delete(100);
         switch (command[0].toLowerCase()) {
           case "ты": {
               message.reply("Сам такой.");
@@ -152,6 +158,51 @@ ntx.on('message', function(message){
                 message.channel.bulkDelete(Number(args[0]) +1);
                 message.channel.send("Я удалил ``" + args[0] + "`` сообщений для вас! :white_check_mark:")
                 .then (function (bot_msg) {bot_msg.delete(1000*5).catch(console.error)} );
+                break;
+              }
+              case "радио":{
+                var listRadio = '\`\`\` flex (Speedwagon Flex Radio)\n wakeup (Speedwagon Wakeup Radio)\`\`\`'
+                if(!args[0]){
+                  message.reply(' ты не сказал, что играть. Я могу играть: '+listRadio);
+                  return;
+                }
+                const channel = ntx.channels.get(config.radio_channel);
+                let radioStation = args[0];
+                switch(radioStation){
+                  case 'wakeup' :{
+                    radioStation = 'http://neitex.ddns.net:8000/wakeup';
+                    break;
+                  }
+                  case 'flex' :{
+                    radioStation = 'http://neitex.ddns.net:8000/flex';
+                    break;
+                  }
+                  default: {
+                    message.reply(' ты не выбрал радио! Я могу играть: '+listRadio);
+                    return;
+                  }
+                }
+                if (!channel) return console.error("The channel does not exist!");
+                channel.join().then(connection => {
+                  console.log("Successfully connected.");
+                  connection.playStream(radioStation);
+                  message.reply(" запустил радио! Приходите слушать.");
+                }).catch(e => {
+                  message.reply(', что-то пошло не так. Радио не включилось :/');
+                  console.error(e);
+                });
+                break;
+              }
+              case "останови": {
+                let modRole = message.guild.roles.find("name", config.mod_role);
+                if(!message.member.roles.has(modRole.id)){
+                  message.reply("У тебя нету права. Это может только Модератор.")
+                  .then (function (bot_msg) {bot_msg.delete(1000*5)} )
+                  break;
+                }
+                message.channel.send("@everyone, радио закончилось.");
+                const channel = ntx.channels.get(config.radio_channel);
+                channel.leave();
                 break;
               }
               case "монетка" : {

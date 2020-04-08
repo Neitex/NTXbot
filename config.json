@@ -1,11 +1,12 @@
 {
 "prefix" : "!",
-"warn_message_mat" : "прочитай правило №1 в канале #правила, и больше так не делай",
+"warn_message_cursed" : "прочитай правило №1 в канале #правила, и больше так не делай",
 "mod_role" : "Модератор",
 "admin_role" : "Администратор",
 "vote_channel" : "626127420738502689",
 "norules_channel" : "601499481418104835",
 "STAGE" : "PRODUCTION",
 "squad_parent_category" : "612553588408975360",
-"squad_role_position" : 6
+"squad_role_position" : 6,
+"radio_channel" : "680074404155097121"
 }
