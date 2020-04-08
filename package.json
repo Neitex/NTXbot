@@ -5,10 +5,10 @@
   "main": "NTXbot.js",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
-    "discord.js": "^11.6.3",
+    "discord.js": "^11.6.4",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
-    "ffmpeg-static": "^4.0.1",
+    "ffmpeg-static": "^4.1.0",
     "icecast-parser": "^3.2.1",
     "node-gyp": "^5.1.0",
     "node-opus": "^0.3.3",
