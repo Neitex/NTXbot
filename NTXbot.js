@@ -200,7 +200,6 @@ ntx.on('message', function(message){
                   .then (function (bot_msg) {bot_msg.delete(1000*5)} )
                   break;
                 }
-                message.channel.send("@everyone, радио закончилось.");
                 const channel = ntx.channels.get(config.radio_channel);
                 channel.leave();
                 break;
